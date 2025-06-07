@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import request from "@/utils/request";
 import UserLayout from "./UserLayout.vue";
 
 export default {
@@ -98,7 +98,7 @@ export default {
         ? "http://localhost:8000/hello/owner/list/"
         : "http://localhost:8000/hello/admin/list/";
 
-      axios.get(url).then(res => {
+      request.get(url).then(res => {
         const result = res.data.data;
         this.receiverList = Array.isArray(result) ? result : [];
 
@@ -140,7 +140,7 @@ export default {
     sendMessage() {
       if (!this.newMsg || !this.receiverId || !this.receiverRole || this.receiverRole === 'all') return;
 
-      axios.post("http://localhost:8000/hello/message/send/", {
+      request.post("http://localhost:8000/hello/message/send/", {
         sender_id: this.userId,
         sender_role: "user",
         receiver_id: this.receiverId,

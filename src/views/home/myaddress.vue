@@ -36,6 +36,7 @@
 </template>
 
 <script>
+import request from "@/utils/request";
 import axios from 'axios'
 import UserLayout from './UserLayout.vue'
 
@@ -53,7 +54,7 @@ export default {
   methods: {
     loadAddresses() {
       this.loading = true
-      axios.get('http://localhost:8000/hello/addr/my/', {
+      request.get('http://localhost:8000/hello/addr/my/', {
         params: { userId: localStorage.getItem('user_id') }
       }).then(res => {
         this.addresses = res.data.data

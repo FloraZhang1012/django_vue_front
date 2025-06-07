@@ -74,6 +74,7 @@
 </template>
 
 <script>
+import request from "@/utils/request";
 import axios from 'axios'
 import UserLayout from './UserLayout.vue'
 
@@ -99,7 +100,7 @@ export default {
     loadData(page) {
       this.pageNum = page
       const userId = localStorage.getItem("user_id")
-      axios.get(`http://localhost:8000/hello/comments/my/`, {
+      request.get(`http://localhost:8000/hello/comments/my/`, {
         params: {
           userId,
           pageNum: page,

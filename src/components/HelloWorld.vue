@@ -1,4 +1,5 @@
 <script setup>
+import request from "@/utils/request";
 import { ref } from 'vue'
 
 defineProps({

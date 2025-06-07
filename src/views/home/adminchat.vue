@@ -42,8 +42,7 @@
 </template>
 
 <script>
-import axios from 'axios';
-
+import request from "@/utils/request";
 export default {
   data() {
     return {
@@ -68,7 +67,7 @@ export default {
         ? 'http://localhost:8000/hello/owner/list/'
         : 'http://localhost:8000/hello/user/list/';  // 确保你后端有这个接口
 
-      axios.get(url)
+      request.get(url)
         .then(res => {
           this.receiverList = Array.isArray(res.data.data) ? res.data.data : [];
         })
@@ -79,7 +78,7 @@ export default {
     loadMessages() {
       if (!this.receiverId || !this.adminId || !this.receiverRole) return;
 
-      axios.get('http://localhost:8000/hello/message/list/', {
+      request.get('http://localhost:8000/hello/message/list/', {
         params: {
           sender_id: this.adminId,
           sender_role: 'admin',
@@ -99,7 +98,7 @@ export default {
     sendMessage() {
       if (!this.newMessage.trim() || !this.receiverId) return;
 
-      axios.post('http://localhost:8000/hello/message/send/', {
+      request.post('http://localhost:8000/hello/message/send/', {
         sender_id: this.adminId,
         sender_role: 'admin',
         receiver_id: this.receiverId,

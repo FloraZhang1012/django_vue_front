@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import request from "@/utils/request";
 import axios from 'axios'
 
 export default {
@@ -31,7 +32,7 @@ export default {
   },
   methods: {
     checkIfCollected() {
-      axios.get(`http://localhost:8000/hello/sc/check/`, {
+      request.get(`http://localhost:8000/hello/sc/check/`, {
         params: {
           userId: this.userId,
           jingquId: this.jingquId
@@ -61,7 +62,7 @@ export default {
         })
       } else {
         // 使用 POST 方法收藏
-        axios.post(`http://localhost:8000/hello/sc/add/`, {
+        request.post(`http://localhost:8000/hello/sc/add/`, {
           userId: this.userId,
           jingquId: this.jingquId
         }).then(res => {

@@ -56,8 +56,7 @@
 </template>
 
 <script>
-import axios from "axios";
-
+import request from "@/utils/request";
 const baseURL = "http://localhost:8000";
 axios.defaults.baseURL = baseURL;
 axios.defaults.timeout = 15000;
@@ -88,7 +87,7 @@ export default {
     async getAllScenicSpots() {
       this.loading = true;
       try {
-        const response = await axios.get('/api/jingqulist/', {
+        const response = await request.get('/api/jingqulist/', {
           params: { pageNum: this.pageNum, pageSize: this.pageSize },
           withCredentials: true
         });
@@ -114,7 +113,7 @@ export default {
     async loadCommentsForAll() {
       for (let item of this.scenicList) {
         try {
-          const res = await axios.get(`/api/pl/?jingqu_id=${item.id}`);
+          const res = await request.get(`/api/pl/?jingqu_id=${item.id}`);
           item.latest_comment = res.data.data[0] || null;
         } catch (e) {
           console.warn('获取评论失败：', e);
@@ -129,7 +128,7 @@ export default {
         this.$message.warning('请填写评论内容并确保已登录');
         return;
       }
-      axios.post('/api/pl/', {
+      request.post('/api/pl/', {
         jingqu_id: item.id,
         shui_id: userId,
         neirong: commentText

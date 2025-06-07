@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import request from "@/utils/request";
 import axios from 'axios'
 import UserLayout from './UserLayout.vue'
 
@@ -52,7 +53,7 @@ export default {
     loadAddress() {
       this.loading = true
       const id = this.$route.query.id
-      axios.get(`http://localhost:8000/hello/addr/detail/`, {
+      request.get(`http://localhost:8000/hello/addr/detail/`, {
         params: { id }
       }).then(res => {
         this.form = res.data.data

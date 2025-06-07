@@ -68,6 +68,7 @@
   </template>
   
   <script setup>
+import request from "@/utils/request";
   import { onMounted, ref } from 'vue';
   import * as echarts from 'echarts';
    

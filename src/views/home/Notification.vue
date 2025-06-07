@@ -40,8 +40,7 @@
 </template>
 
 <script>
-import axios from "axios";
-
+import request from "@/utils/request";
 export default {
   name: "MyNotificationList",
   data() {
@@ -60,7 +59,7 @@ export default {
         return;
       }
 
-      axios.get("http://localhost:8000/hello/notify/list/", {
+      request.get("http://localhost:8000/hello/notify/list/", {
         params: { userId }
         })
 

@@ -33,8 +33,7 @@
 </template>
 
 <script>
-import axios from "axios";
-
+import request from "@/utils/request";
 export default {
   name: "OwnerComments",
   data() {
@@ -56,7 +55,7 @@ export default {
         return;
       }
 
-      axios.get("http://localhost:8000/hello/owner/comments/", {
+      request.get("http://localhost:8000/hello/owner/comments/", {
         params: { maijia_id: ownerId }
       })
         .then((res) => {
@@ -81,7 +80,7 @@ export default {
         return;
       }
       try {
-        const res = await axios.post('http://localhost:8000/hello/pl/reply/', {
+        const res = await request.post('http://localhost:8000/hello/pl/reply/', {
           pl_id: this.selectedCommentId,
           reply: this.replyContent
         });

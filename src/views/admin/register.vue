@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import request from "@/utils/request";
 
 export default {
   name: "register",
@@ -76,7 +76,7 @@ export default {
       }
 
       try {
-        const response = await axios.post("http://127.0.0.1:8000/hello/register/", {
+        const response = await request.post("/hello/register/", {
           username,
           password,
           value: role

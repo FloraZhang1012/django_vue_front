@@ -96,8 +96,7 @@
 
 
 <script>
-import axios from "axios";
-
+import request from "@/utils/request";
 const baseURL = "http://localhost:8000";
 axios.defaults.baseURL = baseURL;
 axios.defaults.timeout = 15000;
@@ -146,14 +145,14 @@ export default {
   },
   methods: {
     getCategoryList() {
-      axios.get("/hello/fl/").then(res => {
+      request.get("/hello/fl/").then(res => {
         if (res.data.code === 200) {
           this.categoryList = res.data.data;
         }
       });
     },
     getRegionList() {
-      axios.get("/hello/dq/").then(res => {
+      request.get("/hello/dq/").then(res => {
         if (res.data.code === 200) {
           this.regionList = res.data.data;
         }

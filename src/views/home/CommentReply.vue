@@ -25,8 +25,7 @@
 </template>
 
 <script>
-import axios from "axios";
-
+import request from "@/utils/request";
 export default {
   name: "CommentReply",
   data() {
@@ -40,7 +39,7 @@ export default {
   methods: {
     fetchComments() {
       const ownerId = localStorage.getItem("userInfoid");
-      axios.get("http://localhost:8000/hello/owner/comments/", {
+      request.get("http://localhost:8000/hello/owner/comments/", {
         params: { maijia_id: ownerId }
       }).then((res) => {
         if (res.data.code === 200) {
@@ -53,7 +52,7 @@ export default {
         this.$message.warning("请输入回复内容");
         return;
       }
-      axios.post("http://localhost:8000/hello/comment/reply/", {
+      request.post("http://localhost:8000/hello/comment/reply/", {
         pl_id: row.id,
         reply: row.reply
       }).then(res => {

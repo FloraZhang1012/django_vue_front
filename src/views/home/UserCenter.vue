@@ -61,8 +61,7 @@
 </template>
 
 <script>
-import axios from 'axios';
-
+import request from "@/utils/request";
 const baseURL = 'http://localhost:8000';
 axios.defaults.baseURL = baseURL;
 axios.defaults.timeout = 15000;
@@ -109,7 +108,7 @@ export default {
     fetchUserData(userId) {
       const isAdmin = localStorage.getItem("isAdmin");
 
-      axios.get(`/api/guanli`, { 
+      request.get(`/api/guanli`, { 
         params: { id: userId, isAdmin }, 
         withCredentials: true 
       })

@@ -10,6 +10,7 @@
   </template>
   
   <script>
+import request from "@/utils/request";
   import api from "@/utils/api.js";
   
   export default {

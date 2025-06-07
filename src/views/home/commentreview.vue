@@ -44,6 +44,7 @@
 </template>
 
 <script>
+import request from "@/utils/request";
 import axios from 'axios'
 
 export default {
@@ -61,7 +62,7 @@ export default {
   methods: {
     loadData(page) {
       this.pageNum = page
-      axios.get(`http://localhost:8000/hello/comments/pending/?pageNum=${page}&pageSize=${this.pageSize}`)
+      request.get(`http://localhost:8000/hello/comments/pending/?pageNum=${page}&pageSize=${this.pageSize}`)
         .then(res => {
           this.tableData = res.data.data
           this.total = res.data.zs

@@ -56,6 +56,7 @@
 </template>
 
 <script>
+import request from "@/utils/request";
 import axios from 'axios'
 import FavoriteButton from "@/views/home/FavoriteButton.vue";
 import UserLayout from "./UserLayout.vue";
@@ -89,7 +90,7 @@ export default {
         return;
       }
       this.loading = true;
-      axios.get(`/hello/jingqudetail/${id}/`, { withCredentials: true })
+      request.get(`/hello/jingqudetail/${id}/`, { withCredentials: true })
         .then(response => {
           this.loading = false;
           if (response.data.code === 200) {
@@ -113,7 +114,7 @@ export default {
     },
     getComments() {
       const id = this.$route.query.id;
-      axios.get(`/hello/pl/?jingqu_id=${id}`, { withCredentials: true })
+      request.get(`/hello/pl/?jingqu_id=${id}`, { withCredentials: true })
         .then(response => {
           if (response.data.code === 200) {
             this.plList = response.data.data;
@@ -135,7 +136,7 @@ export default {
         this.$message.error("留言内容不能为空！");
         return;
       }
-      axios.post("/hello/pl/", {
+      request.post("/hello/pl/", {
         jingqu_id: jingquId,
         shui_id: this.userInfoid,
         neirong: this.textarea
@@ -159,7 +160,7 @@ export default {
         }
 
         // 先获取用户地址信息
-        axios.get("/hello/addr/my/", {
+        request.get("/hello/addr/my/", {
           params: { userId: this.userInfoid }
         }).then(res => {
           const addressList = res.data.data;
@@ -171,7 +172,7 @@ export default {
           // 取第一个地址
           const addrInfo = addressList[0];
 
-          axios.post("/hello/dingdan/", {
+          request.post("/hello/dingdan/", {
           maijia_id: this.detail.maijia?.id || this.detail.maijia_id,  // ✅ 自动适配
           title: this.detail.name,
           img_url: this.detail.img_url,

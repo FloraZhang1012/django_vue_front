@@ -34,6 +34,7 @@
 </template>
 
 <script>
+import request from "@/utils/request";
 import axios from 'axios'
 import UserLayout from './UserLayout.vue'
 
@@ -53,7 +54,7 @@ export default {
       const orderId = this.$route.query.id
       if (!orderId) return
       this.loading = true
-      axios.get(`http://localhost:8000/hello/dingdan/${orderId}/`).then(res => {
+      request.get(`http://localhost:8000/hello/dingdan/${orderId}/`).then(res => {
         this.order = res.data.data
         this.loading = false
       }).catch(() => {
@@ -62,7 +63,7 @@ export default {
       })
     },
     payOrder() {
-      axios.post(`http://localhost:8000/hello/dingdan/pay/${this.order.id}/`).then(res => {
+      request.post(`http://localhost:8000/hello/dingdan/pay/${this.order.id}/`).then(res => {
         this.$message.success(res.data.message || '支付成功 / Payment Success')
         this.loadOrder()
       }).catch(() => {

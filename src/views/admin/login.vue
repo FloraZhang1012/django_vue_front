@@ -30,8 +30,7 @@
 </template>
 
 <script>
-import axios from "axios";
-
+import request from "@/utils/request";
 export default {
     name: "login",
     data() {
@@ -59,7 +58,7 @@ export default {
 
     methods: {
         login() {
-            axios.post("http://127.0.0.1:8000/hello/login/", {
+            request.post("http://127.0.0.1:8000/hello/login/", {
                 username: this.userForm.accountNumber.trim(),
                 password: this.userForm.userPassword.trim(),
                 value: this.userForm.value

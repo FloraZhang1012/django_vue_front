@@ -54,8 +54,7 @@
 </template>
 
 <script>
-import axios from "axios";
-
+import request from "@/utils/request";
 export default {
   name: "mainqiantai",
   data() {
@@ -79,7 +78,7 @@ export default {
 
     // 获取头像
     if (this.userInfoid && this.isAdmin) {
-      axios.get("/api/guanli", {
+      request.get("/api/guanli", {
         params: { id: this.userInfoid, isAdmin: this.isAdmin }
       }).then(res => {
         if (res.data.code === 200 && res.data.data.length > 0) {
@@ -115,7 +114,7 @@ export default {
       const uid = this.userInfoid;
       if (!uid) return;
 
-      axios.get("http://localhost:8000/hello/notify/", {
+      request.get("http://localhost:8000/hello/notify/", {
         params: { user_id: uid }
       }).then(res => {
         if (res.data.code === 200) {

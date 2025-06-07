@@ -47,6 +47,7 @@
 </template>
 
 <script>
+import request from "@/utils/request";
 import axios from 'axios'
 
 export default {
@@ -65,7 +66,7 @@ export default {
   methods: {
     loadData(page) {
       this.pageNum = page
-      axios.get(`http://localhost:8000/hello/comments/all/`, {
+      request.get(`http://localhost:8000/hello/comments/all/`, {
         params: {
           pageNum: page,
           pageSize: this.pageSize,

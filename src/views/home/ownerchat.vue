@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import request from "@/utils/request";
 import { ElMessageBox } from 'element-plus'; // ✅ 引入弹窗
 
 export default {
@@ -92,7 +92,7 @@ export default {
         ? 'http://localhost:8000/hello/admin/list/'
         : 'http://localhost:8000/hello/user/list/';
 
-      axios.get(url)
+      request.get(url)
         .then(res => {
           this.receiverList = Array.isArray(res.data.data) ? res.data.data : [];
           if (callback) callback();
@@ -103,7 +103,7 @@ export default {
     loadMessages() {
       if (!this.receiverId || !this.receiverRole) return;
 
-      axios.get('http://localhost:8000/hello/message/list/', {
+      request.get('http://localhost:8000/hello/message/list/', {
         params: {
           sender_id: this.ownerId,
           sender_role: 'owner',
@@ -123,7 +123,7 @@ export default {
     sendMessage() {
       if (!this.newMessage.trim() || !this.receiverId) return;
 
-      axios.post('http://localhost:8000/hello/message/send/', {
+      request.post('http://localhost:8000/hello/message/send/', {
         sender_id: this.ownerId,
         sender_role: 'owner',
         receiver_id: this.receiverId,

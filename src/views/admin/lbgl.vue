@@ -103,6 +103,7 @@
 </template>
 
 <script>
+import request from "@/utils/request";
 import sDrawer from "@/components/s-drawer/s-drawer.vue"
 export default {
   components: {

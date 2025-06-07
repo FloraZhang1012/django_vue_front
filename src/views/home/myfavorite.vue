@@ -57,6 +57,7 @@
 </template>
 
 <script>
+import request from "@/utils/request";
 import axios from 'axios'
 import UserLayout from './UserLayout.vue'
 
@@ -80,7 +81,7 @@ export default {
   methods: {
     loadFavorites() {
       this.loading = true;
-      axios.get("http://localhost:8000/hello/sc/list/", {
+      request.get("http://localhost:8000/hello/sc/list/", {
         params: {
           userId: this.userId,
           limit: this.pageSize,

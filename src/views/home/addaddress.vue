@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import request from "@/utils/request";
 import axios from 'axios'
 import UserLayout from './UserLayout.vue'
 
@@ -48,7 +49,7 @@ export default {
     submitForm() {
       this.$refs.formRef.validate(valid => {
         if (!valid) return
-        axios.post('http://localhost:8000/hello/addr/', {
+        request.post('http://localhost:8000/hello/addr/', {
           username: this.form.username,
           shouji: this.form.shouji,
           addr: this.form.addr,

@@ -53,8 +53,7 @@
 </template>
 
 <script>
-import axios from 'axios';
-
+import request from "@/utils/request";
 export default {
   data() {
     return {
@@ -76,7 +75,7 @@ export default {
     // 📥 加载数据
     loadData(page) {
       this.pageNum = page;
-      axios.get('http://localhost:8000/hello/lb/', {
+      request.get('http://localhost:8000/hello/lb/', {
         params: { pageNum: page, pageSize: this.pageSize }
       }).then(res => {
         this.tableData = res.data.data;

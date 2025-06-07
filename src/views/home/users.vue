@@ -109,6 +109,7 @@
 </template>
 
 <script setup>
+import request from "@/utils/request";
 import { ref, computed, onMounted } from 'vue'
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
@@ -141,7 +142,7 @@ const filteredUsers = computed(() => {
 const loadUsers = async (page = 1) => {
   loading.value = true
   try {
-    const res = await axios.get(`/api/allusers/?page=${page}&page_size=${pageSize}`)
+    const res = await request.get(`/api/allusers/?page=${page}&page_size=${pageSize}`)
     if (res.data.code === 200) {
       users.value = res.data.data
       total.value = res.data.total
