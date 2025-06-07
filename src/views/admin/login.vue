@@ -58,7 +58,7 @@ export default {
 
     methods: {
         login() {
-            request.post("http://127.0.0.1:8000/hello/login/", {
+            request.post("/hello/login/", {
                 username: this.userForm.accountNumber.trim(),
                 password: this.userForm.userPassword.trim(),
                 value: this.userForm.value
