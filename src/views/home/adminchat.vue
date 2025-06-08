@@ -64,8 +64,8 @@ export default {
       this.messages = [];
 
       const url = this.receiverRole === 'owner'
-        ? 'http://localhost:8000/hello/owner/list/'
-        : 'http://localhost:8000/hello/user/list/';  // 确保你后端有这个接口
+        ? '/hello/owner/list/'
+        : '/hello/user/list/';  // 
 
       request.get(url)
         .then(res => {
@@ -78,7 +78,7 @@ export default {
     loadMessages() {
       if (!this.receiverId || !this.adminId || !this.receiverRole) return;
 
-      request.get('http://localhost:8000/hello/message/list/', {
+      request.get('/hello/message/list/', {
         params: {
           sender_id: this.adminId,
           sender_role: 'admin',

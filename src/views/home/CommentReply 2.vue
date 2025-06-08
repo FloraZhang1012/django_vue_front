@@ -25,7 +25,8 @@
 </template>
 
 <script>
-import request from "@/utils/request";
+import axios from "axios";
+
 export default {
   name: "CommentReply",
   data() {
@@ -39,14 +40,12 @@ export default {
   methods: {
     fetchComments() {
       const ownerId = localStorage.getItem("userInfoid");
-      request.get("/hello/owner/comments/", {
+      axios.get("http://localhost:8000/hello/owner/comments/", {
         params: { maijia_id: ownerId }
       }).then((res) => {
         if (res.data.code === 200) {
           this.comments = res.data.data.map(item => ({ ...item, reply: '' }));
         }
-      }).catch(() => {
-        this.$message.error("加载评论失败");
       });
     },
     submitReply(row) {
@@ -54,7 +53,7 @@ export default {
         this.$message.warning("请输入回复内容");
         return;
       }
-      request.post("/hello/comment/reply/", {
+      axios.post("http://localhost:8000/hello/comment/reply/", {
         pl_id: row.id,
         reply: row.reply
       }).then(res => {

@@ -7,7 +7,7 @@
       ref="upload"
       class="upload-demo"
       drag
-      action="http://localhost:8000/hello/lb/upload/"
+      action="https://online-z16b.onrender.com/hello/lb/upload/"
       :on-success="handleSuccess"
       :show-file-list="false"
       :data="{ title: newTitle }"
@@ -61,35 +61,35 @@ export default {
       total: 0,
       pageSize: 5,
       pageNum: 1,
-      newTitle: '' // 📝 新标题（可选）
+      newTitle: ''
     };
   },
   mounted() {
     this.loadData(1);
   },
   methods: {
-    // 🔗 拼接图片路径
+    // 拼接图片地址
     getImageUrl(url) {
-      return `http://localhost:8000/upimg/${url}`;
+      return `https://online-z16b.onrender.com/upimg/${url}`;
     },
-    // 📥 加载数据
+    // 加载数据
     loadData(page) {
       this.pageNum = page;
-      request.get('http://localhost:8000/hello/lb/', {
+      request.get('/hello/lb/', {
         params: { pageNum: page, pageSize: this.pageSize }
       }).then(res => {
         this.tableData = res.data.data;
         this.total = res.data.zs;
       });
     },
-    // ✅ 上传成功后处理
+    // 上传成功处理
     handleSuccess(res) {
       this.$message.success(res.message || '上传成功 / Upload successful');
-      this.$refs.upload?.clearFiles?.(); // 清空上传框
+      this.$refs.upload?.clearFiles?.();
       this.newTitle = '';
       this.loadData(this.pageNum);
     },
-    // ⚠️ 上传前校验
+    // 上传校验
     beforeUpload(file) {
       const isImg = file.type === 'image/jpeg' || file.type === 'image/png';
       if (!isImg) {
@@ -97,14 +97,14 @@ export default {
       }
       return isImg;
     },
-    // 🗑️ 删除图片
+    // 删除轮播图
     deleteImg(id) {
       this.$confirm('确定删除该轮播图？ / Confirm delete?', '警告 / Warning', {
         confirmButtonText: '确定 / Confirm',
         cancelButtonText: '取消 / Cancel',
         type: 'warning'
       }).then(() => {
-        axios.delete(`http://localhost:8000/hello/lb/delete/${id}/`).then(res => {
+        request.delete(`/hello/lb/delete/${id}/`).then(res => {
           this.$message.success(res.data.message || '删除成功 / Deleted');
           this.loadData(this.pageNum);
         });

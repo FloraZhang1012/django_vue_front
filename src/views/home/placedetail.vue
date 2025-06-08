@@ -57,20 +57,14 @@
 
 <script>
 import request from "@/utils/request";
-import axios from 'axios'
 import FavoriteButton from "@/views/home/FavoriteButton.vue";
 import UserLayout from "./UserLayout.vue";
-
-const baseURL = 'http://localhost:8000';
-axios.defaults.baseURL = baseURL;
-axios.defaults.timeout = 15000;
 
 export default {
   components: { FavoriteButton, UserLayout },
   name: "PlaceDetail",
   data() {
     return {
-      baseURL,
       plList: [],
       textarea: "",
       userInfoid: localStorage.getItem("user_id"),
@@ -90,7 +84,7 @@ export default {
         return;
       }
       this.loading = true;
-      request.get(`/hello/jingqudetail/${id}/`, { withCredentials: true })
+      request.get(`/hello/jingqudetail/${id}/`)
         .then(response => {
           this.loading = false;
           if (response.data.code === 200) {
@@ -100,31 +94,28 @@ export default {
           }
         })
         .catch(error => {
-          console.error("❌ 加载景区详情失败:", error);
           this.loading = false;
           this.$message.error("加载失败，请检查网络连接");
         });
     },
     getImageUrl(fileName) {
       if (!fileName) return '';
-      return fileName.startsWith('http') ? fileName : `${this.baseURL}/upimg/${fileName}`;
+      return fileName.startsWith('http')
+        ? fileName
+        : `https://online-z16b.onrender.com/upimg/${fileName}`; // ✅ 这里替换成你的 Render 后端地址
     },
     goBack() {
       this.$router.push('/home/place');
     },
     getComments() {
       const id = this.$route.query.id;
-      request.get(`/hello/pl/?jingqu_id=${id}`, { withCredentials: true })
+      request.get(`/hello/pl/?jingqu_id=${id}`)
         .then(response => {
           if (response.data.code === 200) {
             this.plList = response.data.data;
           } else {
             this.$message.error("评论加载失败");
           }
-        })
-        .catch(err => {
-          console.error("❌ 加载评论失败", err);
-          this.$message.error("网络异常，评论加载失败");
         });
     },
     addComment(jingquId) {
@@ -148,60 +139,44 @@ export default {
         } else {
           this.$message.error("评论失败：" + res.data.message);
         }
-      }).catch(err => {
-        console.error("❌ 评论异常", err);
-        this.$message.error("评论失败");
       });
     },
-      createOrder() {
-        if (!this.userInfoid) {
-          this.$message.warning("请登录后再下单！");
+    createOrder() {
+      if (!this.userInfoid) {
+        this.$message.warning("请登录后再下单！");
+        return;
+      }
+      request.get("/hello/addr/my/", {
+        params: { userId: this.userInfoid }
+      }).then(res => {
+        const addressList = res.data.data;
+        if (!addressList || addressList.length === 0) {
+          this.$message.warning("请先添加地址后再下单！");
           return;
         }
-
-        // 先获取用户地址信息
-        request.get("/hello/addr/my/", {
-          params: { userId: this.userInfoid }
-        }).then(res => {
-          const addressList = res.data.data;
-          if (!addressList || addressList.length === 0) {
-            this.$message.warning("请先添加地址后再下单！");
-            return;
-          }
-
-          // 取第一个地址
-          const addrInfo = addressList[0];
-
-          request.post("/hello/dingdan/", {
-          maijia_id: this.detail.maijia?.id || this.detail.maijia_id,  // ✅ 自动适配
+        const addrInfo = addressList[0];
+        request.post("/hello/dingdan/", {
+          maijia_id: this.detail.maijia?.id || this.detail.maijia_id,
           title: this.detail.name,
           img_url: this.detail.img_url,
           price: this.detail.price,
           phone: addrInfo.shouji,
           addr: addrInfo.addr,
           shui_id: this.userInfoid
-
-
-          }).then(res => {
-            if (res.data.code === 200) {
-              this.$message.success("下单成功！");
-              this.$router.push("/home/myorder");
-            } else {
-              this.$message.error("下单失败：" + res.data.message);
-            }
-          }).catch(err => {
-            console.error("❌ 下单异常", err);
-            this.$message.error("下单失败");
-          });
-
-        }).catch(() => {
-          this.$message.error("加载地址信息失败");
+        }).then(res => {
+          if (res.data.code === 200) {
+            this.$message.success("下单成功！");
+            this.$router.push("/home/myorder");
+          } else {
+            this.$message.error("下单失败：" + res.data.message);
+          }
         });
-      }
-
+      });
+    }
   }
 };
 </script>
+
 
 <style scoped>
 .placedetail-container {

@@ -57,7 +57,9 @@
 
 <script>
 import request from "@/utils/request";
-const baseURL = "http://localhost:8000";
+import axios from "axios";
+
+const baseURL = "https://online-z16b.onrender.com"; // ✅ 替换为线上地址
 axios.defaults.baseURL = baseURL;
 axios.defaults.timeout = 15000;
 
@@ -172,6 +174,7 @@ export default {
   }
 };
 </script>
+
 
 <style scoped>
 .place-container {

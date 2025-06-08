@@ -16,7 +16,8 @@
 </template>
 
 <script>
-import request from "@/utils/request";
+import axios from "axios";
+
 export default {
   data() {
     return {
@@ -29,7 +30,7 @@ export default {
   },
   methods: {
     loadInbox() {
-      request.get("/admin/inbox/", {
+      axios.get("http://localhost:8000/hello/admin/inbox/", {
         params: { user_id: this.adminId }
       }).then(res => {
         this.inbox = res.data.data || [];

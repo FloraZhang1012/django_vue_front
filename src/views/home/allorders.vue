@@ -37,8 +37,9 @@ export default {
   methods: {
     fetchOrders() {
       this.loading = true;
-      axios
-        .get("http://localhost:8000/hello/dingdan/all/", {
+      
+        request.get("/hello/dingdan/all/", {
+
           params: {
             maijia_id: localStorage.getItem("userInfoid")
           }

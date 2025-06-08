@@ -31,8 +31,10 @@
 
 <script>
 import request from "@/utils/request";
-import axios from 'axios'
-import UserLayout from './UserLayout.vue'
+import axios from 'axios';
+import UserLayout from './UserLayout.vue';
+
+const host = 'https://online-z16b.onrender.com';
 
 export default {
   components: { UserLayout },
@@ -47,36 +49,36 @@ export default {
     }
   },
   mounted() {
-    this.loadAddress()
+    this.loadAddress();
   },
   methods: {
     loadAddress() {
-      this.loading = true
-      const id = this.$route.query.id
-      request.get(`http://localhost:8000/hello/addr/detail/`, {
+      this.loading = true;
+      const id = this.$route.query.id;
+      request.get(`${host}/hello/addr/detail/`, {
         params: { id }
       }).then(res => {
-        this.form = res.data.data
-        this.loading = false
+        this.form = res.data.data;
+        this.loading = false;
       }).catch(() => {
-        this.$message.error("加载地址失败 / Failed to load address")
-        this.loading = false
-      })
+        this.$message.error("加载地址失败 / Failed to load address");
+        this.loading = false;
+      });
     },
     submitForm() {
-      const id = this.$route.query.id
+      const id = this.$route.query.id;
       this.$refs.formRef.validate(valid => {
-        if (!valid) return
-        axios.put(`http://localhost:8000/hello/addr/update/`, {
+        if (!valid) return;
+        axios.put(`${host}/hello/addr/update/`, {
           id,
           ...this.form
         }).then(res => {
-          this.$message.success(res.data.message || '更新成功 / Updated')
-          this.$router.push('/home/myaddress')
+          this.$message.success(res.data.message || '更新成功 / Updated');
+          this.$router.push('/home/myaddress');
         }).catch(() => {
-          this.$message.error('更新失败 / Failed to update')
-        })
-      })
+          this.$message.error('更新失败 / Failed to update');
+        });
+      });
     }
   }
 }

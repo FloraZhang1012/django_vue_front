@@ -1,15 +1,15 @@
 <template>
   <div style="padding: 30px;">
-    <h2>📨 商家聊天 / Owner ↔ Admin/User Chat</h2>
+    <h2>📨 管理员聊天 / Admin ↔ Owner / User Chat</h2>
 
-    <!-- 选择对方角色 -->
-    <el-select v-model="receiverRole" placeholder="选择聊天对象类型 / Role" style="width: 200px; margin-right: 20px" @change="fetchReceivers">
-      <el-option label="管理员 / Admin" value="admin" />
+    <!-- 选择角色 -->
+    <el-select v-model="receiverRole" placeholder="选择聊天对象类型" style="width: 200px; margin-right: 20px" @change="fetchReceivers">
+      <el-option label="商家 / Owner" value="owner" />
       <el-option label="用户 / User" value="user" />
     </el-select>
 
-    <!-- 选择聊天对象 -->
-    <el-select v-model="receiverId" placeholder="选择聊天对象 / Select Receiver" style="width: 300px" @change="loadMessages">
+    <!-- 选择接收人 -->
+    <el-select v-model="receiverId" placeholder="选择聊天对象 Role username / ID" style="width: 300px" @change="loadMessages">
       <el-option
         v-for="r in receiverList"
         :key="r.id"
@@ -18,7 +18,7 @@
       />
     </el-select>
 
-    <!-- 消息输入框 -->
+    <!-- 输入框 -->
     <el-input
       v-model="newMessage"
       placeholder="输入消息 / Enter your message"
@@ -27,12 +27,12 @@
     />
     <el-button type="primary" @click="sendMessage">发送 / Send</el-button>
 
-    <!-- 聊天记录 -->
+    <!-- 消息列表 -->
     <div class="message-list" ref="messageList">
       <div
         v-for="msg in messages"
         :key="msg.id"
-        :class="msg.sender_id == ownerId ? 'sent' : 'received'"
+        :class="msg.sender_id == adminId ? 'sent' : 'received'"
       >
         <b>[{{ msg.sender_role }}]</b> {{ msg.content }}
         <div class="time">{{ msg.created_at }}</div>
@@ -42,14 +42,13 @@
 </template>
 
 <script>
-import request from "@/utils/request";
-import { ElMessageBox } from 'element-plus';
+import axios from 'axios';
 
 export default {
   data() {
     return {
-      ownerId: localStorage.getItem('user_id') || '0',
-      receiverRole: 'admin',
+      adminId: localStorage.getItem('user_id') || '0',
+      receiverRole: 'owner', // 默认选中商家
       receiverId: '',
       newMessage: '',
       receiverList: [],
@@ -57,54 +56,33 @@ export default {
     };
   },
   mounted() {
-    const { id, role } = this.$route.query;
-
-    if (role && id) {
-      this.receiverRole = role;
-      this.$nextTick(() => {
-        this.fetchReceivers(() => {
-          this.receiverId = parseInt(id);
-          this.loadMessages();
-        });
-      });
-    } else {
-      this.fetchReceivers();
-      ElMessageBox.alert(
-        '请从下拉菜单中选择聊天对象后开始对话。\nPlease select a contact from the dropdown to start chatting.',
-        '未选择聊天对象 / No Contact Selected',
-        {
-          confirmButtonText: '我知道了 / OK',
-          type: 'info',
-          showClose: false
-        }
-      );
-    }
+    this.fetchReceivers(); // 默认加载 owner 列表
   },
   methods: {
-    fetchReceivers(callback) {
+    fetchReceivers() {
       this.receiverId = '';
       this.receiverList = [];
       this.messages = [];
 
-      const url = this.receiverRole === 'admin'
-        ? 'https://online-z16b.onrender.com/hello/admin/list/'
-        : 'https://online-z16b.onrender.com/hello/user/list/';
+      const url = this.receiverRole === 'owner'
+        ? 'http://localhost:8000/hello/owner/list/'
+        : 'http://localhost:8000/hello/user/list/';  // 确保你后端有这个接口
 
-      request.get(url)
+      axios.get(url)
         .then(res => {
           this.receiverList = Array.isArray(res.data.data) ? res.data.data : [];
-          if (callback) callback();
-        }).catch(err => {
+        })
+        .catch(err => {
           console.error("加载接收人失败", err);
         });
     },
     loadMessages() {
-      if (!this.receiverId || !this.receiverRole) return;
+      if (!this.receiverId || !this.adminId || !this.receiverRole) return;
 
-      request.get('https://online-z16b.onrender.com/hello/message/list/', {
+      axios.get('http://localhost:8000/hello/message/list/', {
         params: {
-          sender_id: this.ownerId,
-          sender_role: 'owner',
+          sender_id: this.adminId,
+          sender_role: 'admin',
           receiver_id: this.receiverId,
           receiver_role: this.receiverRole
         }
@@ -121,9 +99,9 @@ export default {
     sendMessage() {
       if (!this.newMessage.trim() || !this.receiverId) return;
 
-      request.post('https://online-z16b.onrender.com/hello/message/send/', {
-        sender_id: this.ownerId,
-        sender_role: 'owner',
+      axios.post('http://localhost:8000/hello/message/send/', {
+        sender_id: this.adminId,
+        sender_role: 'admin',
         receiver_id: this.receiverId,
         receiver_role: this.receiverRole,
         content: this.newMessage
@@ -131,13 +109,12 @@ export default {
         this.newMessage = '';
         this.loadMessages();
       }).catch(err => {
-        console.error("发送失败", err);
+        console.error("发送消息失败", err);
       });
     }
   }
 };
 </script>
-
 
 <style scoped>
 .message-list {

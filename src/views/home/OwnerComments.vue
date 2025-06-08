@@ -55,7 +55,7 @@ export default {
         return;
       }
 
-      request.get("http://localhost:8000/hello/owner/comments/", {
+      request.get("https://online-z16b.onrender.com/hello/owner/comments/", {
         params: { maijia_id: ownerId }
       })
         .then((res) => {
@@ -80,7 +80,7 @@ export default {
         return;
       }
       try {
-        const res = await request.post('http://localhost:8000/hello/pl/reply/', {
+        const res = await request.post('https://online-z16b.onrender.com/hello/pl/reply/', {
           pl_id: this.selectedCommentId,
           reply: this.replyContent
         });
@@ -98,6 +98,7 @@ export default {
   }
 };
 </script>
+
 
 <style scoped>
 .owner-comments-wrapper {

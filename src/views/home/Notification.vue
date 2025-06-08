@@ -41,6 +41,8 @@
 
 <script>
 import request from "@/utils/request";
+import axios from "axios";
+
 export default {
   name: "MyNotificationList",
   data() {
@@ -59,24 +61,23 @@ export default {
         return;
       }
 
-      request.get("http://localhost:8000/hello/notify/list/", {
+      request.get("https://online-z16b.onrender.com/hello/notify/list/", {
         params: { userId }
-        })
-
-        .then((res) => {
-          if (res.data.code === 200) {
-            this.notifications = res.data.data;
-          } else {
-            this.$message.error(res.data.message || "加载失败 / Failed to load");
-          }
-        })
-        .catch(() => {
-          this.$message.error("请求错误 / Request error");
-        });
+      })
+      .then((res) => {
+        if (res.data.code === 200) {
+          this.notifications = res.data.data;
+        } else {
+          this.$message.error(res.data.message || "加载失败 / Failed to load");
+        }
+      })
+      .catch(() => {
+        this.$message.error("请求错误 / Request error");
+      });
     },
     markAsRead(id) {
       axios
-        .post(`http://localhost:8000/hello/notify/read/${id}/`)
+        .post(`https://online-z16b.onrender.com/hello/notify/read/${id}/`)
         .then(() => {
           this.$message.success("标记成功 / Marked as read");
           this.fetchNotifications();
@@ -88,6 +89,7 @@ export default {
   },
 };
 </script>
+
 
 <style scoped>
 .notify-wrapper {

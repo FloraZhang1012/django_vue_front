@@ -32,7 +32,7 @@ export default {
   },
   methods: {
     loadInbox() {
-      request.get("http://localhost:8000/hello/owner/inbox/", {
+      request.get("https://online-z16b.onrender.com/hello/owner/inbox/", {
         params: { user_id: this.ownerId }
       }).then(res => {
         this.inbox = res.data.data || [];
@@ -52,6 +52,7 @@ export default {
   }
 }
 </script>
+
 
 <style scoped>
 h2 {

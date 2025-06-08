@@ -32,7 +32,6 @@
     </template>
   </UserLayout>
 </template>
-
 <script>
 import request from "@/utils/request";
 import axios from 'axios'
@@ -54,7 +53,7 @@ export default {
       const orderId = this.$route.query.id
       if (!orderId) return
       this.loading = true
-      request.get(`http://localhost:8000/hello/dingdan/${orderId}/`).then(res => {
+      request.get(`https://online-z16b.onrender.com/hello/dingdan/${orderId}/`).then(res => {
         this.order = res.data.data
         this.loading = false
       }).catch(() => {
@@ -63,7 +62,7 @@ export default {
       })
     },
     payOrder() {
-      request.post(`http://localhost:8000/hello/dingdan/pay/${this.order.id}/`).then(res => {
+      request.post(`https://online-z16b.onrender.com/hello/dingdan/pay/${this.order.id}/`).then(res => {
         this.$message.success(res.data.message || '支付成功 / Payment Success')
         this.loadOrder()
       }).catch(() => {
@@ -76,7 +75,7 @@ export default {
         cancelButtonText: "取消",
         type: "warning"
       }).then(() => {
-        axios.delete(`http://localhost:8000/hello/dingdan/cancel/${this.order.id}/`).then(res => {
+        axios.delete(`https://online-z16b.onrender.com/hello/dingdan/cancel/${this.order.id}/`).then(res => {
           this.$message.success(res.data.message || '订单已取消 / Order Cancelled')
           this.$router.back()
         }).catch(() => {

@@ -1,14 +1,15 @@
 <template>
-    <el-button
-        type="primary"
-        icon="el-icon-check"
-        style="margin-bottom: 20px;"
-        @click="$router.push('/home/commentmanage')"
-        >
-        去评论管理页面 / Go to Comment Management
-    </el-button>
+  <el-button
+    type="primary"
+    icon="el-icon-check"
+    style="margin-bottom: 20px;"
+    @click="$router.push('/home/commentmanage')"
+  >
+    去评论管理页面 / Go to Comment Management
+  </el-button>
+
   <div class="review-container">
-    <h2 class="review-title">📝 评论审核 / <b> Audit Comment</b></h2>
+    <h2 class="review-title">📝 评论审核 / <b>Audit Comment</b></h2>
 
     <el-card shadow="never" class="table-card">
       <el-table :data="tableData" border stripe style="width: 100%;">
@@ -19,12 +20,12 @@
         <el-table-column label="审核操作 / Audit" align="center" width="280">
           <template #default="scope">
             <div style="display: flex; gap: 10px; justify-content: center;">
-            <el-button type="success" size="small" @click="audit(scope.row.id, 'Approved')" plain>
-              ✅ 通过 / Approve
-            </el-button>
-            <el-button type="danger" size="small" @click="audit(scope.row.id, 'Rejected')" plain>
-              ❌ 拒绝 / Reject
-            </el-button>
+              <el-button type="success" size="small" @click="audit(scope.row.id, 'Approved')" plain>
+                ✅ 通过 / Approve
+              </el-button>
+              <el-button type="danger" size="small" @click="audit(scope.row.id, 'Rejected')" plain>
+                ❌ 拒绝 / Reject
+              </el-button>
             </div>
           </template>
         </el-table-column>
@@ -45,7 +46,6 @@
 
 <script>
 import request from "@/utils/request";
-import axios from 'axios'
 
 export default {
   data() {
@@ -54,36 +54,39 @@ export default {
       total: 0,
       pageSize: 10,
       pageNum: 1,
-    }
+    };
   },
   mounted() {
-    this.loadData(this.pageNum)
+    this.loadData(this.pageNum);
   },
   methods: {
     loadData(page) {
-      this.pageNum = page
-      request.get(`http://localhost:8000/hello/comments/pending/?pageNum=${page}&pageSize=${this.pageSize}`)
-        .then(res => {
-          this.tableData = res.data.data
-          this.total = res.data.zs
-        })
-        .catch(() => {
-          this.$message.error("获取评论失败 / Failed to load comments")
-        })
+      this.pageNum = page;
+      request.get('/hello/comments/pending/', {
+        params: {
+          pageNum: page,
+          pageSize: this.pageSize
+        }
+      }).then(res => {
+        this.tableData = res.data.data;
+        this.total = res.data.zs;
+      }).catch(() => {
+        this.$message.error("获取评论失败 / Failed to load comments");
+      });
     },
     audit(id, status) {
-      axios.put(`http://localhost:8000/hello/comment/audit/${id}/`, {
+      request.put(`/hello/comment/audit/${id}/`, {
         status,
         isAdmin: localStorage.getItem("isAdmin")
       }).then(res => {
-        this.$message.success(res.data.message || '审核成功 / Audit successful')
-        this.loadData(this.pageNum)
+        this.$message.success(res.data.message || '审核成功 / Audit successful');
+        this.loadData(this.pageNum);
       }).catch(() => {
-        this.$message.error("审核失败 / Audit failed")
-      })
+        this.$message.error("审核失败 / Audit failed");
+      });
     }
   }
-}
+};
 </script>
 
 <style scoped>

@@ -12,7 +12,9 @@
 
 <script>
 import request from "@/utils/request";
-import axios from 'axios'
+import axios from "axios";
+
+const host = 'https://online-z16b.onrender.com';
 
 export default {
   props: {
@@ -25,21 +27,21 @@ export default {
     return {
       isCollected: false,
       userId: localStorage.getItem("user_id")
-    }
+    };
   },
   mounted() {
-    this.checkIfCollected()
+    this.checkIfCollected();
   },
   methods: {
     checkIfCollected() {
-      request.get(`http://localhost:8000/hello/sc/check/`, {
+      request.get(`${host}/hello/sc/check/`, {
         params: {
           userId: this.userId,
           jingquId: this.jingquId
         }
       }).then(res => {
-        this.isCollected = res.data.favorited
-      })
+        this.isCollected = res.data.favorited;
+      });
     },
     toggleCollect() {
       if (!this.userId) {
@@ -48,31 +50,29 @@ export default {
       }
 
       if (this.isCollected) {
-        // 使用 DELETE 方法
-        axios.delete(`http://localhost:8000/hello/sc/delete/`, {
+        axios.delete(`${host}/hello/sc/delete/`, {
           params: {
             userId: this.userId,
             jingquId: this.jingquId
           }
         }).then(res => {
-          this.isCollected = false
-          this.$message.success(res.data.message)
+          this.isCollected = false;
+          this.$message.success(res.data.message);
         }).catch(() => {
-          this.$message.error("取消收藏失败 / Failed to unfavorite")
-        })
+          this.$message.error("取消收藏失败 / Failed to unfavorite");
+        });
       } else {
-        // 使用 POST 方法收藏
-        request.post(`http://localhost:8000/hello/sc/add/`, {
+        request.post(`${host}/hello/sc/add/`, {
           userId: this.userId,
           jingquId: this.jingquId
         }).then(res => {
-          this.isCollected = true
-          this.$message.success(res.data.message)
+          this.isCollected = true;
+          this.$message.success(res.data.message);
         }).catch(() => {
-          this.$message.error("收藏失败 / Failed to favorite")
-        })
+          this.$message.error("收藏失败 / Failed to favorite");
+        });
       }
     }
   }
-}
+};
 </script>

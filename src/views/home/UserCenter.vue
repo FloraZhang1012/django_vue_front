@@ -62,7 +62,7 @@
 
 <script>
 import request from "@/utils/request";
-const baseURL = 'http://localhost:8000';
+const baseURL = 'https://online-z16b.onrender.com';
 axios.defaults.baseURL = baseURL;
 axios.defaults.timeout = 15000;
 
@@ -81,14 +81,13 @@ export default {
   },
   computed: {
     userTypeText() {
-      const adminMap = { 
-        "1": "系统管理员", 
-        "2": "商家用户 business owner",   // ✨新加的
-        "3": "旅游用户 tourist user" 
+      const adminMap = {
+        "1": "系统管理员",
+        "2": "商家用户 business owner",
+        "3": "旅游用户 tourist user"
       };
       return adminMap[this.userInfo.isAdmin] || "普通用户";
     }
-
   },
   created() {
     this.initUserData();
@@ -108,35 +107,35 @@ export default {
     fetchUserData(userId) {
       const isAdmin = localStorage.getItem("isAdmin");
 
-      request.get(`/api/guanli`, { 
-        params: { id: userId, isAdmin }, 
-        withCredentials: true 
+      request.get(`/api/guanli`, {
+        params: { id: userId, isAdmin },
+        withCredentials: true
       })
-      .then(response => {
-        this.loading = false;
-        if (response.data.code === 200 && response.data.data.length > 0) {
-          const userData = response.data.data[0];
+        .then(response => {
+          this.loading = false;
+          if (response.data.code === 200 && response.data.data.length > 0) {
+            const userData = response.data.data[0];
 
-          let avatarPath = this.defaultAvatar;
-          if (userData.img_url) {
-            avatarPath = userData.img_url.startsWith('http') 
-              ? userData.img_url 
-              : `${this.baseURL}/upimg/${userData.img_url}`;
+            let avatarPath = this.defaultAvatar;
+            if (userData.img_url) {
+              avatarPath = userData.img_url.startsWith('http')
+                ? userData.img_url
+                : `${this.baseURL}/upimg/${userData.img_url}`;
+            }
+
+            this.userInfo = {
+              ...this.userInfo,
+              jianjie: userData.jianjie != null ? userData.jianjie : '',
+              avatar: avatarPath
+            };
+
+            this.resetFormData();
           }
-
-          this.userInfo = {
-            ...this.userInfo,
-            jianjie: userData.jianjie != null ? userData.jianjie : '',
-            avatar: avatarPath
-          };
-
-          this.resetFormData(); 
-        }
-      })
-      .catch(err => {
-        console.error("❌ 请求用户信息失败", err);
-        this.loading = false;
-      });
+        })
+        .catch(err => {
+          console.error("❌ 请求用户信息失败", err);
+          this.loading = false;
+        });
     },
 
     resetFormData() {
@@ -190,9 +189,9 @@ export default {
 
     updateAvatar(fileName) {
       const userId = this.userInfo.id;
-      const isAdmin = this.userInfo.isAdmin;  // ✨补上 isAdmin
-      axios.put(`/api/guanlidetail/${userId}/`, { id: userId, img_url: fileName, isAdmin })
-        .then(res => { 
+      const isAdmin = this.userInfo.isAdmin;
+      axios.put(`${baseURL}/api/guanlidetail/${userId}/`, { id: userId, img_url: fileName, isAdmin })
+        .then(res => {
           if (res.data.code === 200) {
             console.log("✅ 头像更新成功");
           }
@@ -221,7 +220,7 @@ export default {
         updateData.password = this.userForm.password;
       }
 
-      axios.put(`/api/guanlidetail/${userId}/`, updateData)
+      axios.put(`${baseURL}/api/guanlidetail/${userId}/`, updateData)
         .then(res => {
           if (res.data.code === 200) {
             this.$message.success("保存成功 / Saved successfully");
@@ -239,6 +238,7 @@ export default {
   }
 };
 </script>
+
 
 
 <style scoped>

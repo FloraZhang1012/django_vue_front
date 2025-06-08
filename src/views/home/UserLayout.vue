@@ -21,8 +21,8 @@
             <el-icon><Link /></el-icon><span>我的收藏 / My Favorites</span>
           </div>
           <div class="menu-item" @click="$router.push('/home/chat')">
-              <el-icon><ChatDotRound /></el-icon><span>消息中心 / Message</span>
-            </div>
+            <el-icon><ChatDotRound /></el-icon><span>消息中心 / Message</span>
+          </div>
           <div class="menu-item" @click="$router.push('/home/mycomment')">
             <el-icon><Link /></el-icon><span>我的评论 / My Comments</span>
           </div>
@@ -58,18 +58,17 @@ export default {
         avatar: localStorage.getItem("avatar") || ''
       },
       defaultAvatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png'
-    }
+    };
   },
   methods: {
     handleAvatarError() {
-      this.userInfo.avatar = this.defaultAvatar
+      this.userInfo.avatar = this.defaultAvatar;
     }
   }
-}
+};
 </script>
 
 <style scoped>
-/* 原有样式不变 */
 .user-center-wrapper {
   display: flex;
   justify-content: center;

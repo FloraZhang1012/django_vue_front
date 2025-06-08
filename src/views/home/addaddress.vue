@@ -49,7 +49,8 @@ export default {
     submitForm() {
       this.$refs.formRef.validate(valid => {
         if (!valid) return
-        request.post('http://localhost:8000/hello/addr/', {
+        request.post('/hello/addr/', {
+
           username: this.form.username,
           shouji: this.form.shouji,
           addr: this.form.addr,

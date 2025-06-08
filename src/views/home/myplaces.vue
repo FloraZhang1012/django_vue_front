@@ -97,7 +97,8 @@
 
 <script>
 import request from "@/utils/request";
-const baseURL = "http://localhost:8000";
+import axios from "axios";
+const baseURL = "https://online-z16b.onrender.com";
 axios.defaults.baseURL = baseURL;
 axios.defaults.timeout = 15000;
 
@@ -173,14 +174,13 @@ export default {
       };
     },
     editItem(item) {
-    this.form = {
-      ...item,
-      fenlei_id: item.fenlei?.id || '',
-      diqu_id: item.diqu?.id || ''
-    };
-    this.dialogVisible = true;
-  },
-
+      this.form = {
+        ...item,
+        fenlei_id: item.fenlei?.id || '',
+        diqu_id: item.diqu?.id || ''
+      };
+      this.dialogVisible = true;
+    },
     handleUploadSuccess(res) {
       if (res.code === 200) {
         this.form.img_url = res.data.file;
@@ -191,16 +191,12 @@ export default {
     },
     submitForm() {
       this.form.maijia_id = this.userInfoid;
-
-  // ✅ 强制设为英文默认值
-  this.form.zhuangtai = "Available";
-  this.form.is_kaifang = "Open";
-  this.form.is_shenhe = "Approved";
+      this.form.zhuangtai = "Available";
+      this.form.is_kaifang = "Open";
+      this.form.is_shenhe = "Approved";
 
       if (this.form.id) {
-        // 编辑
-        axios
-          .put(`/hello/jingqu/update/${this.form.id}`, this.form)
+        axios.put(`/hello/jingqu/update/${this.form.id}`, this.form)
           .then((res) => {
             if (res.data.code === 200) {
               this.$message.success("更新成功");
@@ -214,9 +210,7 @@ export default {
             this.$message.error("更新失败，请检查网络");
           });
       } else {
-        // 新增
-        axios
-          .post("/hello/jingqu/create", this.form)
+        axios.post("/hello/jingqu/create", this.form)
           .then((res) => {
             if (res.data.code === 200) {
               this.$message.success("创建成功");
@@ -237,8 +231,7 @@ export default {
         cancelButtonText: '取消 Cancel',
         type: 'warning'
       }).then(() => {
-        axios
-          .delete(`/hello/jingqu/delete/${id}`)
+        axios.delete(`/hello/jingqu/delete/${id}`)
           .then(res => {
             if (res.data.code === 200) {
               this.$message.success('删除成功 Deleted');
@@ -254,7 +247,6 @@ export default {
         this.$message.info('已取消删除 Cancelled');
       });
     },
-
     getMyScenicSpots() {
       this.loading = true;
       const params = {
@@ -262,8 +254,7 @@ export default {
         fenlei_id: this.filter.fenlei_id,
         diqu_id: this.filter.diqu_id
       };
-      axios
-        .get("/hello/jingqu/mylist", { params })
+      axios.get("/hello/jingqu/mylist", { params })
         .then((response) => {
           this.loading = false;
           if (response.data.code === 200) {
@@ -309,6 +300,7 @@ export default {
   }
 };
 </script>
+
 
 <style scoped>
 .place-list {
